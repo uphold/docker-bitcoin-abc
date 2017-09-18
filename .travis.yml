@@ -1,0 +1,15 @@
+after_script:
+  - docker images
+
+before_script:
+  - cd "$VERSION"
+  - IMAGE="bitcoind:${VERSION}"
+
+env:
+  - VERSION=0.15
+
+language: bash
+
+script:
+  - docker build -t "$IMAGE" .
+  - docker run "$IMAGE" --version | grep "Bitcoin ABC Daemon"
