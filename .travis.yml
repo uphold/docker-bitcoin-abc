@@ -3,13 +3,18 @@ after_script:
 
 before_script:
   - cd "$VERSION"
-  - IMAGE="bitcoind:${VERSION}"
+  - IMAGE="bitcoin-abc:${VERSION/\//-}"
 
 env:
+  - VERSION=0.16
+  - VERSION=0.16/alpine
   - VERSION=0.15
+  - VERSION=0.15/alpine
 
 language: bash
 
 script:
   - docker build -t "$IMAGE" .
-  - docker run "$IMAGE" --version | grep "Bitcoin ABC Daemon"
+  - docker run "$IMAGE" --version | grep "Bitcoin ABC"
+
+services: docker
