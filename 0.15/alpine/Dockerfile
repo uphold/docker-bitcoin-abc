@@ -1,5 +1,5 @@
 # Build stage for BerkeleyDB
-FROM alpine as berkeleydb
+FROM alpine:3.7 as berkeleydb
 
 RUN apk --no-cache add autoconf
 RUN apk --no-cache add automake
@@ -22,7 +22,7 @@ RUN make install
 RUN rm -rf ${BERKELEYDB_PREFIX}/docs
 
 # Build stage for Bitcoin ABC
-FROM alpine as bitcoin-abc
+FROM alpine:3.7 as bitcoin-abc
 
 COPY --from=berkeleydb /opt /opt
 
@@ -83,7 +83,7 @@ RUN strip ${BITCOIN_ABC_PREFIX}/lib/libbitcoinconsensus.a
 RUN strip ${BITCOIN_ABC_PREFIX}/lib/libbitcoinconsensus.so.0.0.0
 
 # Build stage for compiled artifacts
-FROM alpine
+FROM alpine:3.7
 
 LABEL maintainer.0="João Fonseca (@joaopaulofonseca)" \
   maintainer.1="Pedro Branco (@pedrobranco)" \
