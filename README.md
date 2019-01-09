@@ -6,11 +6,13 @@ A Bitcoin ABC docker image.
 
 ## Tags
 
+- `0.18.5-alpine`, `0.18.5-alpine`, `alpine` ([0.18.5/alpine/Dockerfile](https://github.com/uphold/docker-bitcoin-abc/blob/master/0.18.5/alpine/Dockerfile))
 - `0.18.0-alpine`, `0.18-alpine`, `alpine` ([0.18/alpine/Dockerfile](https://github.com/uphold/docker-bitcoin-abc/blob/master/0.18/alpine/Dockerfile))
 - `0.17.1-alpine`, `0.17-alpine` ([0.17/alpine/Dockerfile](https://github.com/uphold/docker-bitcoin-abc/blob/master/0.17/alpine/Dockerfile))
 - `0.16.2-alpine`, `0.16-alpine` ([0.16/alpine/Dockerfile](https://github.com/uphold/docker-bitcoin-abc/blob/master/0.16/alpine/Dockerfile))
 - `0.15.1-alpine`, `0.15-alpine` ([0.15/alpine/Dockerfile](https://github.com/uphold/docker-bitcoin-abc/blob/master/0.15/alpine/Dockerfile))
 
+- `0.18.5`, `0.18.5`, `latest` ([0.18.5/Dockerfile](https://github.com/uphold/docker-bitcoin-abc/blob/master/0.18.5/Dockerfile))
 - `0.18.0`, `0.18`, `latest` ([0.18/Dockerfile](https://github.com/uphold/docker-bitcoin-abc/blob/master/0.18/Dockerfile))
 - `0.17.1`, `0.17` ([0.17/Dockerfile](https://github.com/uphold/docker-bitcoin-abc/blob/master/0.17/Dockerfile))
 - `0.16.2`, `0.16` ([0.16/Dockerfile](https://github.com/uphold/docker-bitcoin-abc/blob/master/0.16/Dockerfile))
