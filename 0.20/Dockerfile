@@ -5,6 +5,9 @@ LABEL maintainer.0="João Fonseca (@joaopaulofonseca)" \
   maintainer.2="Rui Marinho (@ruimarinho)" \
   maintainer.3="Alex Disney (@adisney-up)"
 
+# Key imports:
+# gosu pubkey
+# jasonbcox, bitcoin-abc dev pubkey
 RUN useradd -r bitcoin \
   && apt-get update -y \
   && apt-get install -y curl gnupg unzip \
@@ -13,6 +16,7 @@ RUN useradd -r bitcoin \
   && set -ex \
   && for key in \
     B42F6819007F00F88E364FD4036A9C25BF357DD4 \
+    3BB16D00D9A6D281591BDC76E4486356E7A81D2C \
   ; do \
     gpg --keyserver pgp.mit.edu --recv-keys "$key" || \
     gpg --keyserver keyserver.pgp.com --recv-keys "$key" || \
@@ -35,6 +39,7 @@ ENV BITCOIN_ABC_DATA=/home/bitcoin/.bitcoin
 ENV PATH=/opt/bitcoin-abc-${BITCOIN_ABC_VERSION}/bin:$PATH
 
 RUN curl -SLO https://download.bitcoinabc.org/${BITCOIN_ABC_VERSION}/linux/bitcoin-abc-${BITCOIN_ABC_VERSION}-x86_64-linux-gnu.tar.gz \
+  && curl https://download.bitcoinabc.org/${BITCOIN_ABC_VERSION}/jasonbcox-sha256sums.${BITCOIN_ABC_VERSION}.asc | gpg --verify - \
   && echo "${BITCOIN_ABC_SHASUM}" | sha256sum -c \
   && tar -xzf *.tar.gz -C /opt \
   && rm *.tar.gz
@@ -48,3 +53,4 @@ EXPOSE 8332 8333 18332 18333 18444
 ENTRYPOINT ["/entrypoint.sh"]
 
 CMD ["bitcoind"]
+
