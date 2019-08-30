@@ -42,7 +42,7 @@ RUN apk --no-cache add protobuf-dev
 RUN apk --no-cache add zeromq-dev
 RUN set -ex \
   && for key in \
-    90C8019E36C2E964 \
+    3BB16D00D9A6D281591BDC76E4486356E7A81D2C \
   ; do \
     gpg --keyserver pgp.mit.edu --recv-keys "$key" || \
     gpg --keyserver keyserver.pgp.com --recv-keys "$key" || \
@@ -53,10 +53,15 @@ RUN set -ex \
 ENV BITCOIN_ABC_VERSION=0.20.0
 ENV BITCOIN_ABC_SHASUM="5a26a8ae8c1cdb4769e4277335733782a6b9bce97af54e1bffeac489c68f3975  bitcoin-abc-${BITCOIN_ABC_VERSION}.tar.gz"
 ENV BITCOIN_ABC_PREFIX=/opt/bitcoin-abc-${BITCOIN_ABC_VERSION}
+ENV BITCOIN_ABC_SRC_TAR=bitcoin-abc-${BITCOIN_ABC_VERSION}.tar.gz
+ENV BITCOIN_ABC_ASC=jasonbcox-sha256sums.${BITCOIN_ABC_VERSION}.asc
 
-RUN wget https://download.bitcoinabc.org/${BITCOIN_ABC_VERSION}/src/bitcoin-abc-${BITCOIN_ABC_VERSION}.tar.gz
-RUN echo "${BITCOIN_ABC_SHASUM}" | sha256sum -c
-RUN tar -xzf *.tar.gz
+RUN wget -O ${BITCOIN_ABC_SRC_TAR} https://download.bitcoinabc.org/${BITCOIN_ABC_VERSION}/src/${BITCOIN_ABC_SRC_TAR} \
+  && wget https://download.bitcoinabc.org/${BITCOIN_ABC_VERSION}/${BITCOIN_ABC_ASC} \
+  && gpg --verify ${BITCOIN_ABC_ASC} \
+  && grep ${BITCOIN_ABC_SRC_TAR} ${BITCOIN_ABC_ASC} | awk -v tar=${BITCOIN_ABC_SRC_TAR} '{print $1 "  " tar}' | sha256sum -c \
+  && tar -xzf ${BITCOIN_ABC_SRC_TAR} \
+  && rm -r *.tar.gz
 
 WORKDIR /bitcoin-abc-${BITCOIN_ABC_VERSION}
 
