@@ -36,11 +36,14 @@ ENV BITCOIN_ABC_VERSION=0.20.0
 ENV BITCOIN_ABC_SHASUM="c00afe0f23163a64b692f9633ab0f49af7eedde32aa7b768582a0a731bb6d013  bitcoin-abc-${BITCOIN_ABC_VERSION}-x86_64-linux-gnu.tar.gz"
 ENV BITCOIN_ABC_PREFIX=/opt/bitcoin-abc-${BITCOIN_ABC_VERSION}
 ENV BITCOIN_ABC_DATA=/home/bitcoin/.bitcoin
+ENV BITCOIN_ABC_TAR=bitcoin-abc-${BITCOIN_ABC_VERSION}-x86_64-linux-gnu.tar.gz
+ENV BITCOIN_ABC_ASC=jasonbcox-sha256sums.${BITCOIN_ABC_VERSION}.asc
 ENV PATH=/opt/bitcoin-abc-${BITCOIN_ABC_VERSION}/bin:$PATH
 
-RUN curl -SLO https://download.bitcoinabc.org/${BITCOIN_ABC_VERSION}/linux/bitcoin-abc-${BITCOIN_ABC_VERSION}-x86_64-linux-gnu.tar.gz \
-  && curl https://download.bitcoinabc.org/${BITCOIN_ABC_VERSION}/jasonbcox-sha256sums.${BITCOIN_ABC_VERSION}.asc | gpg --verify - \
-  && echo "${BITCOIN_ABC_SHASUM}" | sha256sum -c \
+RUN curl -SLO https://download.bitcoinabc.org/${BITCOIN_ABC_VERSION}/linux/${BITCOIN_ABC_TAR} \
+  && curl -SLO https://download.bitcoinabc.org/${BITCOIN_ABC_VERSION}/${BITCOIN_ABC_ASC} \
+  && gpg --verify ${BITCOIN_ABC_ASC} \
+  && grep ${BITCOIN_ABC_TAR} ${BITCOIN_ABC_ASC} | sha256sum -c \
   && tar -xzf *.tar.gz -C /opt \
   && rm *.tar.gz
 
