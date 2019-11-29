@@ -12,11 +12,9 @@ podTemplate(label: 'docker-bitcoin-abc', containers: [
         dir("${VERSION}/alpine") {
           sh "docker build -t santiment/bitcoin-abc:${VERSION_MINOR} -t santiment/bitcoin-abc:${VERSION} ."
 
-          if (env.BRANCH_NAME == "master") {
-            withDockerRegistry([ credentialsId: "dockerHubCreds", url: "" ]) {
-              sh "docker push santiment/bitcoin-abc:${VERSION_MINOR}"
-              sh "docker push santiment/bitcoin-abc:${VERSION}"
-            }
+          withDockerRegistry([ credentialsId: "dockerHubCreds", url: "" ]) {
+            sh "docker push santiment/bitcoin-abc:${VERSION_MINOR}"
+            sh "docker push santiment/bitcoin-abc:${VERSION}"
           }
         }
       }
