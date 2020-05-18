@@ -42,12 +42,12 @@ RUN apk --no-cache add protobuf-dev
 RUN apk --no-cache add zeromq-dev
 RUN set -ex \
   && for key in \
-    3BB16D00D9A6D281591BDC76E4486356E7A81D2C \
+  3BB16D00D9A6D281591BDC76E4486356E7A81D2C \
   ; do \
-    gpg --keyserver pgp.mit.edu --recv-keys "$key" || \
-    gpg --keyserver keyserver.pgp.com --recv-keys "$key" || \
-    gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$key" || \
-    gpg --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys "$key" ; \
+  gpg --keyserver pgp.mit.edu --recv-keys "$key" || \
+  gpg --keyserver keyserver.pgp.com --recv-keys "$key" || \
+  gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$key" || \
+  gpg --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys "$key" ; \
   done
 
 ENV BITCOIN_ABC_VERSION=0.21.6
@@ -69,17 +69,18 @@ RUN sed -i '/AX_PROG_CC_FOR_BUILD/a\AR_FLAGS=cr' src/secp256k1/configure.ac
 RUN sed -i s:sys/fcntl.h:fcntl.h: src/compat.h
 RUN ./autogen.sh
 RUN ./configure LDFLAGS=-L`ls -d /opt/db*`/lib/ CPPFLAGS=-I`ls -d /opt/db*`/include/ \
-    BDB_LIBS="-L${BERKELEYDB_PREFIX}/lib -ldb_cxx-4.8" BDB_CFLAGS="-I${BDB_PREFIX}/include" \
-    --prefix=${BITCOIN_ABC_PREFIX} \
-    --mandir=/usr/share/man \
-    --disable-tests \
-    --disable-bench \
-    --disable-ccache \
-    --with-gui=no \
-    --with-utils \
-    --with-libs \
-    --with-daemon \
-    --without-seeder
+  BDB_LIBS="-L${BERKELEYDB_PREFIX}/lib -ldb_cxx-4.8" BDB_CFLAGS="-I${BDB_PREFIX}/include" \
+  --prefix=${BITCOIN_ABC_PREFIX} \
+  --mandir=/usr/share/man \
+  --disable-tests \
+  --disable-bench \
+  --disable-ccache \
+  --with-gui=no \
+  --with-utils \
+  --with-libs \
+  --with-daemon \
+  --without-seeder \
+  --enable-deprecated-build-system
 RUN make -j4
 RUN make install
 RUN strip ${BITCOIN_ABC_PREFIX}/bin/bitcoin-cli
