@@ -42,7 +42,7 @@ RUN apk --no-cache add protobuf-dev
 RUN apk --no-cache add zeromq-dev
 RUN set -ex \
   && for key in \
-    90C8019E36C2E964 \
+    3BB16D00D9A6D281591BDC76E4486356E7A81D2C \
   ; do \
     gpg --keyserver pgp.mit.edu --recv-keys "$key" || \
     gpg --keyserver keyserver.pgp.com --recv-keys "$key" || \
@@ -50,13 +50,17 @@ RUN set -ex \
     gpg --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys "$key" ; \
   done
 
-ENV BITCOIN_ABC_VERSION=0.19.5
-ENV BITCOIN_ABC_SHASUM="bdc13e2822cc4eba2c5079b1f0afc780d130292ee73ee2832eae2a793e770d88  bitcoin-abc-${BITCOIN_ABC_VERSION}.tar.gz"
+ENV BITCOIN_ABC_VERSION=0.21.6
 ENV BITCOIN_ABC_PREFIX=/opt/bitcoin-abc-${BITCOIN_ABC_VERSION}
+ENV BITCOIN_ABC_SRC_TAR=bitcoin-abc-${BITCOIN_ABC_VERSION}.tar.gz
+ENV BITCOIN_ABC_ASC=jasonbcox-sha256sums.${BITCOIN_ABC_VERSION}.asc
 
-RUN wget https://download.bitcoinabc.org/${BITCOIN_ABC_VERSION}/linux/src/bitcoin-abc-${BITCOIN_ABC_VERSION}.tar.gz
-RUN echo "${BITCOIN_ABC_SHASUM}" | sha256sum -c
-RUN tar -xzf *.tar.gz
+RUN wget -O ${BITCOIN_ABC_SRC_TAR} https://download.bitcoinabc.org/${BITCOIN_ABC_VERSION}/src/${BITCOIN_ABC_SRC_TAR} \
+  && wget https://download.bitcoinabc.org/${BITCOIN_ABC_VERSION}/${BITCOIN_ABC_ASC} \
+  && gpg --verify ${BITCOIN_ABC_ASC} \
+  && grep ${BITCOIN_ABC_SRC_TAR} ${BITCOIN_ABC_ASC} | awk -v tar=${BITCOIN_ABC_SRC_TAR} '{print $1 "  " tar}' | sha256sum -c \
+  && tar -xzf ${BITCOIN_ABC_SRC_TAR} \
+  && rm -r *.tar.gz *.asc
 
 WORKDIR /bitcoin-abc-${BITCOIN_ABC_VERSION}
 
@@ -89,7 +93,8 @@ FROM alpine:3.8
 
 LABEL maintainer.0="João Fonseca (@joaopaulofonseca)" \
   maintainer.1="Pedro Branco (@pedrobranco)" \
-  maintainer.2="Rui Marinho (@ruimarinho)"
+  maintainer.2="Rui Marinho (@ruimarinho)" \
+  maintainer.3="Alex Disney (@adisney-up)"
 
 RUN adduser -S bitcoin
 RUN apk --no-cache add \
@@ -102,9 +107,8 @@ RUN apk --no-cache add \
   su-exec
 
 ENV BITCOIN_ABC_DATA=/home/bitcoin/.bitcoin
-ENV BITCOIN_ABC_VERSION=0.19.5
-ENV BITCOIN_ABC_PREFIX=/opt/bitcoin-abc-${BITCOIN_ABC_VERSION}
-ENV PATH=${BITCOIN_ABC_PREFIX}/bin:$PATH
+ENV BITCOIN_ABC_VERSION=0.21.6
+ENV PATH=/opt/bitcoin-abc-${BITCOIN_ABC_VERSION}/bin:$PATH
 
 COPY --from=bitcoin-abc /opt /opt
 COPY docker-entrypoint.sh /entrypoint.sh
