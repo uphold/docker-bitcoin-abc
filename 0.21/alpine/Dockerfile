@@ -50,7 +50,7 @@ RUN set -ex \
     gpg --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys "$key" ; \
   done
 
-ENV BITCOIN_ABC_VERSION=0.21.6
+ENV BITCOIN_ABC_VERSION=0.21.9
 ENV BITCOIN_ABC_PREFIX=/opt/bitcoin-abc-${BITCOIN_ABC_VERSION}
 ENV BITCOIN_ABC_SRC_TAR=bitcoin-abc-${BITCOIN_ABC_VERSION}.tar.gz
 ENV BITCOIN_ABC_ASC=jasonbcox-sha256sums.${BITCOIN_ABC_VERSION}.asc
@@ -79,7 +79,8 @@ RUN ./configure LDFLAGS=-L`ls -d /opt/db*`/lib/ CPPFLAGS=-I`ls -d /opt/db*`/incl
     --with-utils \
     --with-libs \
     --with-daemon \
-    --without-seeder
+    --without-seeder \
+    --enable-deprecated-build-system
 RUN make -j4
 RUN make install
 RUN strip ${BITCOIN_ABC_PREFIX}/bin/bitcoin-cli
@@ -107,7 +108,7 @@ RUN apk --no-cache add \
   su-exec
 
 ENV BITCOIN_ABC_DATA=/home/bitcoin/.bitcoin
-ENV BITCOIN_ABC_VERSION=0.21.6
+ENV BITCOIN_ABC_VERSION=0.21.9
 ENV PATH=/opt/bitcoin-abc-${BITCOIN_ABC_VERSION}/bin:$PATH
 
 COPY --from=bitcoin-abc /opt /opt
