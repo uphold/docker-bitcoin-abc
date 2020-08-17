@@ -15,13 +15,13 @@ RUN useradd -r bitcoin \
   && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
   && set -ex \
   && for key in \
-    B42F6819007F00F88E364FD4036A9C25BF357DD4 \
-    3BB16D00D9A6D281591BDC76E4486356E7A81D2C \
+  B42F6819007F00F88E364FD4036A9C25BF357DD4 \
+  3BB16D00D9A6D281591BDC76E4486356E7A81D2C \
   ; do \
-    gpg --keyserver pgp.mit.edu --recv-keys "$key" || \
-    gpg --keyserver keyserver.pgp.com --recv-keys "$key" || \
-    gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$key" || \
-    gpg --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys "$key" ; \
+  gpg --keyserver pgp.mit.edu --recv-keys "$key" || \
+  gpg --keyserver keyserver.pgp.com --recv-keys "$key" || \
+  gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$key" || \
+  gpg --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys "$key" ; \
   done
 
 ENV GOSU_VERSION=1.10
@@ -33,7 +33,7 @@ RUN curl -o /usr/local/bin/gosu -fSL https://github.com/tianon/gosu/releases/dow
   && chmod +x /usr/local/bin/gosu
 
 ENV BITCOIN_ABC_DATA=/home/bitcoin/.bitcoin
-ENV BITCOIN_ABC_VERSION=0.21.9
+ENV BITCOIN_ABC_VERSION=0.21.13
 ENV BITCOIN_ABC_TAR=bitcoin-abc-${BITCOIN_ABC_VERSION}-x86_64-linux-gnu.tar.gz
 ENV BITCOIN_ABC_ASC=jasonbcox-sha256sums.${BITCOIN_ABC_VERSION}.asc
 ENV PATH=/opt/bitcoin-abc-${BITCOIN_ABC_VERSION}/bin:$PATH
