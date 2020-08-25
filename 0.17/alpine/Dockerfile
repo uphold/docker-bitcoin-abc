@@ -50,8 +50,8 @@ RUN set -ex \
     gpg --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys "$key" ; \
   done
 
-ENV BITCOIN_ABC_VERSION=0.17.1
-ENV BITCOIN_ABC_SHASUM="8baaedfb868fdbbde2a074b6396fb00dec28df35a0f6f29e9995778d3e08535a  bitcoin-abc-${BITCOIN_ABC_VERSION}.tar.gz"
+ENV BITCOIN_ABC_VERSION=0.17.2
+ENV BITCOIN_ABC_SHASUM="b6617ced60032e43644d60b76d029e689baf403fe9792232cb0fb5239ef0212c  bitcoin-abc-${BITCOIN_ABC_VERSION}.tar.gz"
 ENV BITCOIN_ABC_PREFIX=/opt/bitcoin-abc-${BITCOIN_ABC_VERSION}
 
 RUN wget https://download.bitcoinabc.org/${BITCOIN_ABC_VERSION}/linux/src/bitcoin-abc-${BITCOIN_ABC_VERSION}.tar.gz
@@ -65,6 +65,7 @@ RUN sed -i '/AX_PROG_CC_FOR_BUILD/a\AR_FLAGS=cr' src/secp256k1/configure.ac
 RUN sed -i s:sys/fcntl.h:fcntl.h: src/compat.h
 RUN ./autogen.sh
 RUN ./configure LDFLAGS=-L`ls -d /opt/db*`/lib/ CPPFLAGS=-I`ls -d /opt/db*`/include/ \
+    BDB_LIBS="-L${BERKELEYDB_PREFIX}/lib -ldb_cxx-4.8" BDB_CFLAGS="-I${BDB_PREFIX}/include" \
     --prefix=${BITCOIN_ABC_PREFIX} \
     --mandir=/usr/share/man \
     --disable-tests \
@@ -101,7 +102,7 @@ RUN apk --no-cache add \
   su-exec
 
 ENV BITCOIN_ABC_DATA=/home/bitcoin/.bitcoin
-ENV BITCOIN_ABC_VERSION=0.17.1
+ENV BITCOIN_ABC_VERSION=0.17.2
 ENV BITCOIN_ABC_PREFIX=/opt/bitcoin-abc-${BITCOIN_ABC_VERSION}
 ENV PATH=${BITCOIN_ABC_PREFIX}/bin:$PATH
 
