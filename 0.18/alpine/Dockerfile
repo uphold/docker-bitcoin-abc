@@ -50,11 +50,11 @@ RUN set -ex \
     gpg --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys "$key" ; \
   done
 
-ENV BITCOIN_ABC_VERSION=0.18.0
-ENV BITCOIN_ABC_SHASUM="11dc3ba7f193c70879b3fc3cc716fde56880dfebfab8bb556b7a355b2e64f09d  bitcoin-abc-${BITCOIN_ABC_VERSION}.tar.gz"
+ENV BITCOIN_ABC_VERSION=0.18.8
+ENV BITCOIN_ABC_SHASUM="9c3f21aec6fbd20bdaeb5667a96655dd6cbfb0ef66f6d26e0646c817f9fb1518  bitcoin-abc-${BITCOIN_ABC_VERSION}.tar.gz"
 ENV BITCOIN_ABC_PREFIX=/opt/bitcoin-abc-${BITCOIN_ABC_VERSION}
 
-RUN wget https://download.bitcoinabc.org/${BITCOIN_ABC_VERSION}/linux/bitcoin-abc-${BITCOIN_ABC_VERSION}.tar.gz
+RUN wget https://download.bitcoinabc.org/${BITCOIN_ABC_VERSION}/linux/src/bitcoin-abc-${BITCOIN_ABC_VERSION}.tar.gz
 RUN echo "${BITCOIN_ABC_SHASUM}" | sha256sum -c
 RUN tar -xzf *.tar.gz
 
@@ -102,7 +102,7 @@ RUN apk --no-cache add \
   su-exec
 
 ENV BITCOIN_ABC_DATA=/home/bitcoin/.bitcoin
-ENV BITCOIN_ABC_VERSION=0.18.0
+ENV BITCOIN_ABC_VERSION=0.18.8
 ENV BITCOIN_ABC_PREFIX=/opt/bitcoin-abc-${BITCOIN_ABC_VERSION}
 ENV PATH=${BITCOIN_ABC_PREFIX}/bin:$PATH
 
