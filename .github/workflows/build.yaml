@@ -37,7 +37,7 @@ jobs:
           BITCOIN_ABC_VERSION=${{matrix.version}}
           LATEST_BITCOIN_ABC_MAJOR_VERSION=$(ls  | grep 0 | sort -n | tail -n 1)
           PUSH=false
-          REPO=uphold/docker-bitcoin-abc
+          REPO=uphold/bitcoin-abc
           TAGS=()
           if [[ $GITHUB_REF == refs/tags/* ]]; then
             TAG=${GITHUB_REF#refs/tags/}
