@@ -29,7 +29,6 @@ VOLUME /data
 
 COPY docker-entrypoint.sh /entrypoint.sh
 
-VOLUME ["/bitcoin/.bitcoin"]
 ENTRYPOINT ["/entrypoint.sh", "bitcoind"]
 
 EXPOSE 8332 8333 18332 18333
