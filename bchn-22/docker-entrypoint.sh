@@ -24,5 +24,6 @@ if [[ "$1" == "bitcoin-cli" || "$1" == "bitcoin-tx" || "$1" == "bitcoind" || "$1
 	exec gosu bitcoin "$@"
 fi
 
-echo
+echo "exec argument is:"
+echo "$@"
 exec "$@"
