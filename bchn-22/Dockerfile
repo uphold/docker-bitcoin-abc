@@ -28,7 +28,8 @@ RUN mkdir "$BITCOIN_DATA" \
 VOLUME /data
 
 COPY docker-entrypoint.sh /entrypoint.sh
-ENTRYPOINT ["/entrypoint.sh"]
+
+VOLUME ["/bitcoin/.bitcoin"]
+ENTRYPOINT ["/entrypoint.sh", "bitcoind"]
 
 EXPOSE 8332 8333 18332 18333
-CMD ["bitcoind"]
