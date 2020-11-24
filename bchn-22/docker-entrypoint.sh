@@ -2,6 +2,8 @@
 set -e
 
 if [[ "$1" == "bitcoin-cli" || "$1" == "bitcoin-tx" || "$1" == "bitcoind" || "$1" == "test_bitcoin" ]]; then
+	echo "Bitcoin_data is resolved as"
+	echo "$BITCOIN_DATA"
 	mkdir -p "$BITCOIN_DATA"
 
 	if [[ ! -s "$BITCOIN_DATA/bitcoin.conf" ]]; then
