@@ -7,9 +7,9 @@ podTemplate(label: 'docker-bitcoin-abc', containers: [
     stage('Build Image') {
       container('docker') {
         def scmVars = checkout scm
-        def VERSION = "0.21"
-        def VERSION_MINOR = "${VERSION}.0"
-        dir("${VERSION}/alpine") {
+        def VERSION = "bchn-22"
+        def VERSION_MINOR = "${VERSION}.1"
+        dir("${VERSION}") {
           sh "docker build -t santiment/bitcoin-abc:${VERSION_MINOR} -t santiment/bitcoin-abc:${VERSION} ."
 
           withDockerRegistry([ credentialsId: "dockerHubCreds", url: "" ]) {
